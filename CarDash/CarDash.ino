@@ -28,7 +28,7 @@ double altitudeGPSft;
 double speedGPSmph;
 double latitudeGPS;
 double longitudeGPS;
-unsigned long distanceMiToHome;
+double distanceMiToHome;
 double courseToHome;
 
 void setup()
@@ -53,12 +53,12 @@ void loop()
     latitudeGPS=round(gps.location.lat()*100.0)/100.0;
     longitudeGPS=round(gps.location.lng()*100.0)/100.0;
     distanceMiToHome=TinyGPSPlus::distanceBetween(latitudeGPS, longitudeGPS, HOME_LAT, HOME_LON)/1609.344;
-    courseToHome=TinyGPSPlus::courseTo(latitudeGPS, longitudeGPS, HOME_LAT, HOME_LON);
-
+//    courseToHome=TinyGPSPlus::courseTo(latitudeGPS, longitudeGPS, HOME_LAT, HOME_LON);
+    Serial.println(distanceMiToHome);
     printLCDDistAlt(altitudeGPSft,0);
     printLCDDistSpeed(speedGPSmph,distanceMiToHome,1);
     printLCDLatLong(latitudeGPS,longitudeGPS,2);
-    smartDelay(1000);
+    smartDelay(500);
     printLCDtemp(temp,tempF,hum,3);
     
 
@@ -81,13 +81,22 @@ void printLCDDistSpeed(float spd,float dist, int line){
 
     /* GPS Distance to House and Speed*/
     lcd.setCursor(0,line);
-    lcd.print("Spd:");
-    lcd.setCursor(4,line);
-    lcd.print(round(spd),1);
-    lcd.setCursor(6,line);
+    lcd.print("V:");
+    lcd.setCursor(2,line);
+    if (spd<10) {
+      lcd.print(spd,1);
+    }
+    else {
+      lcd.print(round(spd),1);
+    }
+    lcd.setCursor(5,line);
     lcd.print("mph,Home:");
     lcd.setCursor(15,line);
-    lcd.print(round(dist),1);
+    if (dist<10){
+      lcd.print(dist,1);}
+    else  {
+      lcd.print(round(dist),1); 
+    }
     lcd.setCursor(18,line);
     lcd.print("mi");
 
