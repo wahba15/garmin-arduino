@@ -33,7 +33,7 @@ double courseToHome;
 
 void setup()
 {
-  Serial.begin(115200);
+//  Serial.begin(115200);
    ss.begin(GPSBaud);
   dht.begin();
   lcd.begin();                      // initialize the lcd 
@@ -54,7 +54,7 @@ void loop()
     longitudeGPS=round(gps.location.lng()*100.0)/100.0;
     distanceMiToHome=TinyGPSPlus::distanceBetween(latitudeGPS, longitudeGPS, HOME_LAT, HOME_LON)/1609.344;
 //    courseToHome=TinyGPSPlus::courseTo(latitudeGPS, longitudeGPS, HOME_LAT, HOME_LON);
-    Serial.println(distanceMiToHome);
+//    Serial.println(distanceMiToHome);
     printLCDDistAlt(altitudeGPSft,0);
     printLCDDistSpeed(speedGPSmph,distanceMiToHome,1);
     printLCDLatLong(latitudeGPS,longitudeGPS,2);
