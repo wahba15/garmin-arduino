@@ -50,15 +50,15 @@ void loop()
     tempF=dht.convertCtoF(temp);
     altitudeGPSft=gps.altitude.feet();
     speedGPSmph=gps.speed.mph();
-    latitudeGPS=round(gps.location.lat()*100.0)/100.0;
-    longitudeGPS=round(gps.location.lng()*100.0)/100.0;
+    latitudeGPS=gps.location.lat();
+    longitudeGPS=gps.location.lng();
     distanceMiToHome=TinyGPSPlus::distanceBetween(latitudeGPS, longitudeGPS, HOME_LAT, HOME_LON)/1609.344;
 //    courseToHome=TinyGPSPlus::courseTo(latitudeGPS, longitudeGPS, HOME_LAT, HOME_LON);
 //    Serial.println(distanceMiToHome);
     printLCDDistAlt(altitudeGPSft,0);
     printLCDDistSpeed(speedGPSmph,distanceMiToHome,1);
     printLCDLatLong(latitudeGPS,longitudeGPS,2);
-    smartDelay(500);
+    smartDelay(250);
     printLCDtemp(temp,tempF,hum,3);
     
 
@@ -85,20 +85,27 @@ void printLCDDistSpeed(float spd,float dist, int line){
     lcd.setCursor(2,line);
     if (spd<10) {
       lcd.print(spd,1);
+      lcd.setCursor(5,line);
+      lcd.print("mph,Home:");
     }
     else {
       lcd.print(round(spd),1);
+      lcd.setCursor(4,line);
+      lcd.print(" mph,Home:");
     }
     lcd.setCursor(5,line);
     lcd.print("mph,Home:");
-    lcd.setCursor(15,line);
-    if (dist<10){
-      lcd.print(dist,1);}
+    lcd.setCursor(14,line);
+    if (dist<100){
+      lcd.print(dist,1);
+      lcd.setCursor(18,line);
+      lcd.print("mi");}
     else  {
-      lcd.print(round(dist),1); 
+      lcd.print(int(round(dist)));
+      lcd.setCursor(18,line);
+      lcd.print("mi"); 
     }
-    lcd.setCursor(18,line);
-    lcd.print("mi");
+
 
 }
 
@@ -136,15 +143,15 @@ void printLCDtemp(float temp,float tempF,float hum, int line){
     lcd.setCursor(0,line);
     lcd.print("T: ");
     lcd.setCursor(3,line);
-    lcd.print(round(temp),1);
+    lcd.print(int(round(temp)));
     lcd.setCursor(5,line);
     lcd.print("C/");
     lcd.setCursor(7,line);
-    lcd.print(round(tempF),1);
+    lcd.print(int(round(tempF)));
     lcd.setCursor(9,line);
     lcd.print("F, Hum: ");
     lcd.setCursor(16,line);
-    lcd.print(round(hum),1);
+    lcd.print(int(round(hum)));
     lcd.setCursor(18,line);
     lcd.print("% ");
 
