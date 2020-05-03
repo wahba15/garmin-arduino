@@ -58,7 +58,7 @@ void loop()
     printLCDDistAlt(altitudeGPSft,0);
     printLCDDistSpeed(speedGPSmph,distanceMiToHome,1);
     printLCDLatLong(latitudeGPS,longitudeGPS,2);
-    smartDelay(250);
+    smartDelay(100);
     printLCDtemp(temp,tempF,hum,3);
     
 
