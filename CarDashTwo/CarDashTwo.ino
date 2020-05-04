@@ -48,10 +48,10 @@ void loop()
 {
   
     //Read data and store it to variables hum and temp
-//    Serial.println("Line 0");
+
     hum = dht.readHumidity();
     temp= dht.readTemperature();
-    tempF=dht.convertCtoF(temp);
+    tempF=(temp*9/5)+32;
     smartDelay(50);
 
     altitudeGPSft=gps.altitude.meters()*3.280839895;

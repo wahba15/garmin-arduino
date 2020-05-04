@@ -47,31 +47,29 @@ void setup()
 void loop()
 {
     timer=millis();
-    //Read data and store it to variables hum and temp
-//    Serial.println("Line 0");
+
+
     hum = dht.readHumidity();
     temp= dht.readTemperature();
     tempF=dht.convertCtoF(temp);
-//    Serial.println("Line 1");
+
     altitudeGPSft=gps.altitude.meters()*3.280839895;
     speedGPSmph=gps.speed.mph();
     latitudeGPS=gps.location.lat();
     longitudeGPS=gps.location.lng();
 //    Serial.println(altitudeGPSft);
     distanceMiToHome=TinyGPSPlus::distanceBetween(latitudeGPS, longitudeGPS, HOME_LAT, HOME_LON)/1609.344;
-//    courseToHome=TinyGPSPlus::courseTo(latitudeGPS, longitudeGPS, HOME_LAT, HOME_LON);
-//    Serial.println(distanceMiToHome);
-//Serial.println("Line 3");
+
     
     if (timer-timerIF>500) {
        
       printLCDDistAlt(altitudeGPSft,0);
-    printLCDDistSpeed(speedGPSmph,distanceMiToHome,1);
-    printLCDLatLong(latitudeGPS,longitudeGPS,2); 
-//    Serial.println("Line 4");
-   
-    printLCDtemp(temp,tempF,hum,3);
-    timerIF=millis();}
+      printLCDDistSpeed(speedGPSmph,distanceMiToHome,1);
+      printLCDLatLong(latitudeGPS,longitudeGPS,2); 
+      printLCDtemp(temp,tempF,hum,3);
+      timerIF=millis();
+    }
+    
     smartDelay(100);
 //    Serial.println("Testing Frequency");
 
