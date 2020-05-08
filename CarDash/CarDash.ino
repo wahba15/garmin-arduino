@@ -35,7 +35,7 @@ unsigned long timerIF=0;
 
 void setup()
 {
-  Serial.begin(115200);
+//  Serial.begin(115200);
   ss.begin(GPSBaud);
   dht.begin();
   lcd.begin();                      // initialize the lcd 
