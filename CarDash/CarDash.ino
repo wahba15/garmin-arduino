@@ -35,13 +35,14 @@ unsigned long timerIF=0;
 
 void setup()
 {
-//  Serial.begin(115200);
+  Serial.begin(115200);
    ss.begin(GPSBaud);
   dht.begin();
   lcd.begin();                      // initialize the lcd 
  smartDelay(1000);
   // Print a message to the LCD.
 //  lcd.backlight();
+printLCDFixedText();
 }
 
 void loop()
@@ -52,6 +53,7 @@ void loop()
     hum = dht.readHumidity();
     temp= dht.readTemperature();
     tempF=temp*(5/9)+32;
+
 
     altitudeGPSft=gps.altitude.meters()*3.280839895;
     speedGPSmph=gps.speed.mph();
@@ -66,7 +68,9 @@ void loop()
       printLCDDistAlt(altitudeGPSft,0);
       printLCDDistSpeed(speedGPSmph,distanceMiToHome,1);
       printLCDLatLong(latitudeGPS,longitudeGPS,2); 
-      printLCDtemp(temp,tempF,hum,3);
+      if (!isnan(temp)) {
+        printLCDtemp(temp,tempF,hum,3);
+      }
       timerIF=millis();
     }
     
@@ -77,12 +81,12 @@ void loop()
 void printLCDDistAlt(float alt, int line){
 
     /* GPS Altitude */
-    lcd.setCursor(0,line);
-    lcd.print("Altitude: ");
+//    lcd.setCursor(0,line);
+//    lcd.print("Altitude: ");
     lcd.setCursor(10,line);
     lcd.print(round(alt),1);
-    lcd.setCursor(15,line);
-    lcd.print("ft");
+//    lcd.setCursor(15,line);
+//    lcd.print("ft");
 
 
 }
@@ -90,30 +94,36 @@ void printLCDDistAlt(float alt, int line){
 void printLCDDistSpeed(float spd,float dist, int line){
 
     /* GPS Distance to House and Speed*/
-    lcd.setCursor(0,line);
-    lcd.print("V:");
+//    lcd.setCursor(0,line);
+//    lcd.print("V:");
     lcd.setCursor(2,line);
     if (spd<10) {
       lcd.print(spd,1);
-      lcd.setCursor(5,line);
-      lcd.print("mph,Home:");
+
     }
     else {
-      lcd.print(round(spd),1);
+      lcd.print(int(spd));
       lcd.setCursor(4,line);
-      lcd.print(" mph,Home:");
+      lcd.print(" ");
     }
+//          lcd.setCursor(5,line);
+//      lcd.print("mph,Home:");
     lcd.setCursor(5,line);
     lcd.print("mph,Home:");
     lcd.setCursor(14,line);
-    if (dist<100){
+    if (dist<100 & dist>10){
+      lcd.print(int(dist));
+}
+     else if (dist<10 & dist>1){
       lcd.print(dist,1);
-      lcd.setCursor(18,line);
-      lcd.print("mi");}
+}
+else if (dist<1){
+      lcd.print(dist,2);
+}
     else  {
       lcd.print(int(round(dist)));
-      lcd.setCursor(18,line);
-      lcd.print("mi"); 
+//      lcd.setCursor(18,line);
+//      lcd.print("mi"); 
     }
 
 
@@ -134,20 +144,20 @@ void printLCDLatLong(float lat,float lon, int line){
 void printLCDtemp(float temp,float tempF,float hum, int line){
 
     /* Humidity and Temperature */
-    lcd.setCursor(0,line);
-    lcd.print("T: ");
+//    lcd.setCursor(0,line);
+//    lcd.print("T: ");
     lcd.setCursor(3,line);
     lcd.print(int(round(temp)));
-    lcd.setCursor(5,line);
-    lcd.print("C/");
+//    lcd.setCursor(5,line);
+//    lcd.print("C/");
     lcd.setCursor(7,line);
     lcd.print(int(round(tempF)));
-    lcd.setCursor(9,line);
-    lcd.print("F, Hum: ");
+//    lcd.setCursor(9,line);
+//    lcd.print("F, Hum: ");
     lcd.setCursor(16,line);
     lcd.print(int(round(hum)));
-    lcd.setCursor(18,line);
-    lcd.print("% ");
+//    lcd.setCursor(18,line);
+//    lcd.print("% ");
 
     }
 
@@ -162,4 +172,31 @@ static void smartDelay(unsigned long ms)
     while (ss.available())
       gps.encode(ss.read());
   } while (millis() - start < ms);
+}
+
+void printLCDFixedText(){
+
+    /* GPS Altitude */
+    lcd.setCursor(0,0);
+    lcd.print("Altitude: ");
+    lcd.setCursor(15,0);
+    lcd.print("ft");
+
+ /* GPS Distance to House and Speed*/
+        lcd.setCursor(0,1);
+    lcd.print("V:");
+     lcd.setCursor(5,1);
+      lcd.print("mph,Home:");
+            lcd.setCursor(18,1);
+      lcd.print("mi"); 
+
+/* Humidity and Temperature */
+    lcd.setCursor(0,3);
+    lcd.print("T: ");
+    lcd.setCursor(5,3);
+    lcd.print("C/");
+      lcd.setCursor(10,3);
+    lcd.print("F,Hum:");
+        lcd.setCursor(19,3);
+    lcd.print("%");
 }
