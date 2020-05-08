@@ -97,15 +97,14 @@ void printLCDDistSpeed(float spd,float dist, int line){
   }
   
   lcd.setCursor(14,line);
-  if (dist<100 & dist>10){
-    lcd.print(int(dist));
+  if (dist<10){
+    lcd.print(dist,2);  
   }
-
-  else if (dist<10){
-    lcd.print(dist,2);
+  else if (dist>10 & dist<100){
+    lcd.print(dist,1);
   }
   else  {
-    lcd.print(int(round(dist)));
+    lcd.print(int(dist));
   }
 }
 
