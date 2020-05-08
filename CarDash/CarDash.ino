@@ -87,12 +87,15 @@ void printLCDDistSpeed(float spd,float dist, int line){
   if (spd<10) {
     lcd.print(spd,1);
   }
-  else {
+  else if (spd>10 & spd<100){
     lcd.print(int(spd));
     lcd.setCursor(4,line);
     lcd.print(" ");
   }
-
+  else  {
+    lcd.print(int(spd));
+  }
+  
   lcd.setCursor(14,line);
   if (dist<100 & dist>10){
     lcd.print(int(dist));
