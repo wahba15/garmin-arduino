@@ -51,7 +51,7 @@ void loop()
 
     hum = dht.readHumidity();
     temp= dht.readTemperature();
-    tempF=dht.convertCtoF(temp);
+    tempF=temp*(5/9)+32;
 
     altitudeGPSft=gps.altitude.meters()*3.280839895;
     speedGPSmph=gps.speed.mph();
@@ -71,7 +71,6 @@ void loop()
     }
     
     smartDelay(100);
-//    Serial.println("Testing Frequency");
 
 }
 
@@ -123,27 +122,11 @@ void printLCDDistSpeed(float spd,float dist, int line){
 void printLCDLatLong(float lat,float lon, int line){
 
         /* GPS Lat Long */
-//    lcd.setCursor(0,line);
-//    lcd.print("(");
-//    lcd.setCursor(1,line);
-//    lcd.print(lat,10);
-//    lcd.setCursor(10,line);
-//    lcd.print(",");
-//    lcd.setCursor(11,line);
-//    lcd.print(lon,10);
-//    lcd.setCursor(19,line);
-//    lcd.print(")");
-
-//    lcd.setCursor(0,line);
-//    lcd.print("(");
     lcd.setCursor(0,line);
     lcd.print(lat,6);
-//    lcd.setCursor(10,line);
-//    lcd.print(",");
     lcd.setCursor(9,line);
     lcd.print(lon,6);
-//    lcd.setCursor(19,line);
-//    lcd.print(")");
+
 
   
 }
