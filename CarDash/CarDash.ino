@@ -123,13 +123,31 @@ void printLCDLatLong(float lat,float lon, int line){
 void printLCDtemp(float temp,float tempF,float hum, int line){
 
     /* Humidity and Temperature */
-
-  lcd.setCursor(3,line);
-  lcd.print(int(temp));
-  lcd.setCursor(7,line);
-  lcd.print(int(tempF));
-  lcd.setCursor(17,line);
-  lcd.print(int(hum));
+  if (temp>-10){
+    lcd.setCursor(3,line);
+    lcd.print(int(temp));
+    lcd.setCursor(5,3);
+    lcd.print("C/");
+    lcd.setCursor(7,line);
+    lcd.print(int(tempF));
+    if (tempF<100)  {
+      lcd.setCursor(9,line);
+      lcd.print(" ");  
+    }
+    lcd.setCursor(17,line);
+    lcd.print(int(hum));
+  }
+  else {
+    lcd.setCursor(3,line);
+    lcd.print(int(temp));
+    lcd.setCursor(6,3);
+    lcd.print("C/");
+    lcd.setCursor(8,line);
+    lcd.print(int(tempF));
+    lcd.setCursor(17,line);
+    lcd.print(int(hum));
+    
+  }
 
 }
 
@@ -165,8 +183,6 @@ void printLCDFixedText(){
 /* Humidity and Temperature */
   lcd.setCursor(0,3);
   lcd.print("T: ");
-  lcd.setCursor(5,3);
-  lcd.print("C/");
   lcd.setCursor(10,3);
   lcd.print((char)223);
   lcd.setCursor(11,3);
