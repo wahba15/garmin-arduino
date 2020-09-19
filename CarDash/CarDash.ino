@@ -72,13 +72,40 @@ void loop()
   smartDelay(100);
 }
 
-void printLCDDistAlt(float alt, int line){
-
+void printLCDDistAlt(double alt, int line){
+  double roundedAlt=round(alt);
+  int negAlt= (int)roundedAlt;
     /* GPS Altitude */
   lcd.setCursor(10,line);
-  lcd.print(round(alt),1);
+  if (alt<0) {
+    lcd.print(negAlt,1);
+    lcd.setCursor(12,line);
+    lcd.print("   "); 
+  }
+  else {
+    lcd.print(roundedAlt,1);
+  }
+  
+  if (alt<10 & alt>0){
+    lcd.setCursor(11,line);
+    lcd.print("    ");
+  }
+  else if (alt<100 & alt>10) {
+    lcd.setCursor(12,line);
+    lcd.print("   ");
+  }
+  else if (alt<1000 & alt>100) {
+    lcd.setCursor(13,line);
+    lcd.print("  ");
+  }
+  else if (alt<10000 & alt>1000) {
+    lcd.setCursor(14,line);
+    lcd.print(" ");
+  }
 
-}
+  }
+
+
 
 void printLCDDistSpeed(float spd,float dist, int line){
 
@@ -102,6 +129,11 @@ void printLCDDistSpeed(float spd,float dist, int line){
   }
   else if (dist>10 & dist<100){
     lcd.print(dist,1);
+  }
+  else if (dist>100 & dist<1000){
+    lcd.print(dist,1);
+    lcd.setCursor(17,line);
+    lcd.print(" ");
   }
   else  {
     lcd.print(int(dist));
