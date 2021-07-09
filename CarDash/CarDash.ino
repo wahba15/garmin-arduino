@@ -66,6 +66,7 @@ void loop()
     if (!isnan(temp)) {
       printLCDtemp(temp,tempF,hum,3);
     }
+    
     timerIF=millis();
   }
   
@@ -83,7 +84,7 @@ void printLCDDistAlt(double alt, int line){
     lcd.print("   "); 
   }
   else {
-    lcd.print(roundedAlt,1);
+    lcd.print(roundedAlt,0);
   }
   
   if (alt<10 & alt>0){
@@ -131,7 +132,7 @@ void printLCDDistSpeed(float spd,float dist, int line){
     lcd.print(dist,1);
   }
   else if (dist>100 & dist<1000){
-    lcd.print(dist,1);
+    lcd.print(dist,0);
     lcd.setCursor(17,line);
     lcd.print(" ");
   }
