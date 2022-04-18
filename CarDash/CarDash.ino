@@ -7,12 +7,16 @@
 
 //Constants
 #define DHTPIN 7     // what pin we're connected to
+#define LEDPIN 6     // what pin we're connected to
 #define DHTTYPE DHT22   // DHT 22  (AM2302)
 DHT dht(DHTPIN, DHTTYPE); //// Initialize DHT sensor for normal 16mhz Arduino
 LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
-static const int RXPin = 4, TXPin = 3;
+static const int RXPin = 2, TXPin = 3;
 static const uint32_t GPSBaud = 4800;
 static const double HOME_LAT = 32.382788, HOME_LON = -110.962640;
+const int buttonPin1 = 12;     // the number of the pushbutton pin
+const int buttonPin2 = 13;     // the number of the pushbutton pin
+const int DimRate=2;
 // The TinyGPS++ object
 TinyGPSPlus gps;
 
@@ -32,6 +36,10 @@ double distanceMiToHome;
 double courseToHome;
 unsigned long timer;
 unsigned long timerIF=0;
+int brightness = 125; 
+int buttonState1 = LOW; 
+int buttonState2 = LOW;         
+
 
 void setup()
 {
@@ -41,23 +49,44 @@ void setup()
   lcd.begin();                      // initialize the lcd 
   smartDelay(1000);
   printLCDFixedText();
+  pinMode(buttonPin1,INPUT);
+  pinMode(buttonPin2,INPUT);
 }
 
 void loop()
 {
+  int smartdelayTimer=100;
   timer=millis();
-
+  
   hum = dht.readHumidity();
   temp= dht.readTemperature();
   tempF=((temp*9)/5)+32;
 
-
+  buttonState1 = digitalRead(buttonPin1);
+  buttonState2 = digitalRead(buttonPin2);
+  
+  if (buttonState1==HIGH) {
+    brightness=brightness+DimRate;
+    brightness=min(brightness,255);
+    smartdelayTimer=10;
+  }
+    
+  else if (buttonState2==HIGH) {
+    brightness=brightness-DimRate;
+    brightness=max(brightness,0);
+    smartdelayTimer=10;
+  }
+  else  {
+    smartdelayTimer=100;
+  }
   altitudeGPSft=gps.altitude.meters()*3.280839895;
   speedGPSmph=gps.speed.mph();
   latitudeGPS=gps.location.lat();
   longitudeGPS=gps.location.lng();
   distanceMiToHome=TinyGPSPlus::distanceBetween(latitudeGPS, longitudeGPS, HOME_LAT, HOME_LON)/1609.344;
- 
+
+//altitudeGPSft=brightness;
+  analogWrite(LEDPIN,brightness);
   if (timer-timerIF>500) {
    
     printLCDDistAlt(altitudeGPSft,0);
@@ -70,7 +99,7 @@ void loop()
     timerIF=millis();
   }
   
-  smartDelay(100);
+  smartDelay(smartdelayTimer);
 }
 
 void printLCDDistAlt(double alt, int line){
